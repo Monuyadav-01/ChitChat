@@ -46,6 +46,9 @@ fun CheckSignedIn(vm: LCViewModel, navController: NavController) {
     }
     val signIn = vm.signIn.value
     if(signIn && !alreadySignIn.value){
-        navController.navigate(DestinationScreen.ChatList.route)
+        navController.navigate(DestinationScreen.ChatList.route){
+            popUpTo(0)
+
+        }
     }
 }

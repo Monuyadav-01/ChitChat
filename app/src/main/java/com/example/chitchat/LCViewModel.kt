@@ -19,7 +19,6 @@ class LCViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-
     var inProgress = mutableStateOf(false)
     var eventMutableState = mutableStateOf<Events<String>?>(null)
     var signIn = mutableStateOf(false)
@@ -27,29 +26,69 @@ class LCViewModel @Inject constructor(
 
     init {
         val currentUser = auth.currentUser
-        signIn.value= currentUser !=null
+        signIn.value = currentUser != null
 
         currentUser?.uid?.let {
             getUserData(it)
         }
     }
 
-    fun signUp(name: String, phoneNumber: String, email: String, password: String) {
+    fun signUp(name: String, number: String, email: String, password: String) {
         inProgress.value = true
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-            if (it.isSuccessful) {
-                signIn.value = true
-                createOrUpdateProfile()
+        if (name.isEmpty() or number.isEmpty() or email.isEmpty() or password.isEmpty()) {
+            handleException(customMessage = "Please fill all details")
+            return
+        }
+        inProgress.value = true
+        db.collection(USER_NODE).whereEqualTo("number", number).get().addOnSuccessListener {
+            if (it.isEmpty) {
+                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        inProgress.value = false
+                        signIn.value = true
+                        createOrUpdateProfile(name, number)
+                    } else {
+                        inProgress.value = false
+                        handleException(it.exception, "SignUp Failed")
+                    }
+                }
             } else {
-                handleException(it.exception, "SignUp Failed")
+                inProgress.value = false
+                handleException(customMessage = "Number Already exists")
+            }
+        }
+
+    }
+
+    fun loginIn(email: String, password: String) {
+        if (email.isEmpty() or password.isEmpty()) {
+            handleException(customMessage = "Enter email and password for login")
+            return
+        } else {
+            inProgress.value = true
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    signIn.value = true
+                    inProgress.value = false
+                    auth.currentUser?.uid.let {
+                        getUserData(it!!)
+                    }
+                } else {
+                    handleException(
+                        exception = it.exception,
+                        customMessage = "Something went wrong! Login Failed"
+                    )
+                }
             }
         }
     }
 
     private fun createOrUpdateProfile(
-        name: String? = null, number: String? = null, imageUrl: String? = null
+        name: String? = null,
+        number: String? = null,
+        imageUrl: String? = null
     ) {
-        var uid = auth.currentUser?.uid
+        val uid = auth.currentUser?.uid
         val userData = UserData(
             userId = uid,
             name = name ?: userData.value?.name,

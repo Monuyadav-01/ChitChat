@@ -64,7 +64,7 @@ fun ChatAppNavigation() {
             SignUp(navController, vm)
         }
         composable(DestinationScreen.Login.route) {
-            LoginScreen()
+            LoginScreen(navController, vm)
         }
         composable(DestinationScreen.ChatList.route) {
             ChatListScreen()
