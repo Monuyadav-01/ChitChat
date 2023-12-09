@@ -1,11 +1,8 @@
 package com.example.chitchat
 
 import android.util.Log
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.currentRecomposeScope
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
 import com.example.chitchat.data.Events
 import com.example.chitchat.data.USER_NODE
 import com.example.chitchat.data.UserData
