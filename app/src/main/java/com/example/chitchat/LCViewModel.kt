@@ -72,6 +72,7 @@ class LCViewModel @Inject constructor(
                     inProgress.value = false
                     auth.currentUser?.uid.let {
                         getUserData(it!!)
+
                     }
                 } else {
                     handleException(
@@ -86,17 +87,19 @@ class LCViewModel @Inject constructor(
     private fun createOrUpdateProfile(
         name: String? = null,
         number: String? = null,
-        imageUrl: String? = null
+        imageUrl: String? = null,
     ) {
         val uid = auth.currentUser?.uid
+
         val userData = UserData(
             userId = uid,
             name = name ?: userData.value?.name,
             number = number ?: userData.value?.number,
-            imageUrl = imageUrl ?: userData.value?.imageUrl
+            imageUrl = imageUrl ?: userData.value?.imageUrl,
+
+
 
         )
-
         uid?.let {
             inProgress.value = true
             db.collection(USER_NODE).document(uid).get().addOnSuccessListener {
@@ -121,7 +124,7 @@ class LCViewModel @Inject constructor(
                 handleException(error, "cannot retrieve user")
             }
             if (value != null) {
-                var user = value.toObject<UserData>()
+                val user = value.toObject<UserData>()
                 userData.value = user
                 inProgress.value = false
             }

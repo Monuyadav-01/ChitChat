@@ -9,13 +9,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.chitchat.screens.ChatListScreen
 import com.example.chitchat.screens.LoginScreen
+import com.example.chitchat.screens.ProfileScreen
 import com.example.chitchat.screens.SignUp
+import com.example.chitchat.screens.StatusScreen
 import com.example.chitchat.ui.theme.ChitChatTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -67,7 +68,13 @@ fun ChatAppNavigation() {
             LoginScreen(navController, vm)
         }
         composable(DestinationScreen.ChatList.route) {
-            ChatListScreen()
+            ChatListScreen(navController = navController, vm = vm)
+        }
+        composable(DestinationScreen.StatusList.route) {
+            StatusScreen(navController = navController, vm = vm)
+        }
+        composable(DestinationScreen.Profile.route) {
+            ProfileScreen(navController = navController, vm = vm)
         }
     }
 
