@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
+    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -90,4 +91,8 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    // coil dependency
+    
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }
